@@ -17,8 +17,10 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Set global prefix
-  app.setGlobalPrefix('api');
+  // Set global prefix, excluding root path
+  app.setGlobalPrefix('api', {
+    exclude: ['/'],
+  });
 
   const port = process.env.PORT || 3000;
   await app.listen(port, '0.0.0.0');
