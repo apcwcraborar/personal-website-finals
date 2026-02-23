@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { createEntry, deleteEntry, getEntries, login, updateEntry } from "./api";
+import Home from "./Home";
 
 const TOKEN_KEY = "guestbookToken";
 
@@ -11,11 +12,6 @@ function LoginPage() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const defaultRedirect = useMemo(
-    () => import.meta.env.VITE_AFTER_LOGIN_URL || "/main.html",
-    []
-  );
-
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
@@ -24,9 +20,7 @@ function LoginPage() {
     try {
       const data = await login(username, password);
       localStorage.setItem(TOKEN_KEY, data.token);
-
-      const redirectUrl = data.redirectUrl || defaultRedirect;
-      window.location.href = redirectUrl;
+      navigate("/guestbook");
     } catch (submitError) {
       setError(submitError.message);
       setIsSubmitting(false);
@@ -226,9 +220,7 @@ function GuestbookPage() {
           <button className="secondary" onClick={handleLogout}>
             Logout
           </button>
-          <a href={import.meta.env.VITE_AFTER_LOGIN_URL || "/main.html"}>
-            Go to Main Page
-          </a>
+          <a href="/">Go to Main Page</a>
         </div>
       </div>
     </div>
@@ -238,7 +230,8 @@ function GuestbookPage() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/guestbook" element={<GuestbookPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
