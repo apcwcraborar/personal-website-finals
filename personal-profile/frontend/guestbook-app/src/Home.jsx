@@ -16,7 +16,7 @@ const Home = () => {
           <h2>Wenchie Arhowen Raborar</h2>
           <a href="#">View my piccys XD</a>
           <br />
-          <a href="/guestbook">Open Guestbook</a>
+          <a href="/">Open Guestbook</a>
         </div>
 
         <div className="padding-top">

@@ -94,7 +94,7 @@ function GuestbookPage() {
         </div>
 
         <div className="actions-row">
-          <a href="/">Go to Main Page</a>
+          <a href="/home">Go to Main Page</a>
         </div>
       </div>
     </div>
@@ -104,8 +104,8 @@ function GuestbookPage() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/guestbook" element={<GuestbookPage />} />
+      <Route path="/" element={<GuestbookPage />} />
+      <Route path="/home" element={<Home />} />
     </Routes>
   );
 }

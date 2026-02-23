@@ -12,7 +12,7 @@ This repository contains:
 | Layer | Technology |
 |---|---|
 | Frontend | React + Vite |
-| Backend | NestJS + TypeScript |
+| Backend | NestJS |
 | Database | Supabase (PostgreSQL) |
 | Deployment | Vercel |
 
