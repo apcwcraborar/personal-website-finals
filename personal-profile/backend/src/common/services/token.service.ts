@@ -11,7 +11,7 @@ export class TokenService {
   private readonly maxAge: number;
 
   constructor() {
-    this.secret = process.env.FLASK_SECRET_KEY || 'dev-secret-change-me';
+    this.secret = process.env.JWT_SECRET || 'dev-secret-change-me';
     this.maxAge = parseInt(process.env.TOKEN_MAX_AGE_SECONDS || '86400', 10);
   }
 
