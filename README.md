@@ -1,20 +1,20 @@
 # Personal Website + Guestbook
 
-This project now contains:
+This repository contains:
 
-- Main profile page: `personal-profile/frontend/main.html`
-- Separate guestbook React app: `personal-profile/frontend/guestbook-app`
-- Flask API backend: `personal-profile/backend`
-- Supabase as the guestbook database
+- Main profile page + static frontend assets in `personal-profile/frontend`
+- Guestbook React app in `personal-profile/frontend/guestbook-app`
+- NestJS API backend in `personal-profile/backend`
+- Supabase for guestbook data storage
 
 ## Stack
 
 | Layer | Technology |
 |---|---|
 | Frontend | React + Vite |
-| Backend | Flask |
+| Backend | NestJS + TypeScript |
 | Database | Supabase (PostgreSQL) |
-| Deployment | Vercel (frontend), Render (backend) |
+| Deployment | Vercel |
 
 ## 1) Supabase Setup
 
@@ -31,53 +31,69 @@ create table if not exists public.guestbook_entries (
 );
 ```
 
-> The backend uses `SUPABASE_SERVICE_ROLE_KEY`, so keep it only on Render/backend (never in frontend).
+Keep `SUPABASE_SERVICE_ROLE_KEY` in backend environment variables only.
 
-## 2) Backend (Flask) Local Run
+## 2) Backend (NestJS) Local Run
 
 Location: `personal-profile/backend`
 
-1. Copy env file:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy env file:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Fill required values in `.env`:
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+3. Fill required values in `.env`:
+
+- `PORT` (default `3000`)
+- `FLASK_SECRET_KEY` (used by legacy naming in code; keep a strong random string)
 - `APP_LOGIN_USERNAME`
 - `APP_LOGIN_PASSWORD`
+- `TOKEN_MAX_AGE_SECONDS`
 - `FRONTEND_ORIGIN` (for local React use `http://localhost:5173`)
-- `AFTER_LOGIN_URL` (where login redirects, default is `/main.html`)
+- `AFTER_LOGIN_URL` (for example `/main.html`)
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `SUPABASE_GUESTBOOK_TABLE` (for example `guestbook_entries`)
 
-3. Install and run:
+4. Run development server:
 
 ```bash
-pip install -r requirements.txt
-python app.py
+npm run dev
 ```
 
-Backend base URL: `http://localhost:5000`
+Backend base URL: `http://localhost:3000`
 
 ## 3) Frontend (React) Local Run
 
 Location: `personal-profile/frontend/guestbook-app`
 
-1. Copy env file:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy env file:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Set:
-- `VITE_API_BASE_URL=http://localhost:5000`
+3. Set frontend variables:
+
+- `VITE_API_BASE_URL=http://localhost:3000`
 - `VITE_AFTER_LOGIN_URL=/main.html` (or your hosted main page URL)
 
-3. Install and run:
+4. Run development server:
 
 ```bash
-npm install
 npm run dev
 ```
 
@@ -90,36 +106,34 @@ Frontend URL: `http://localhost:5173`
 - `POST /api/entries`
 - `PUT /api/entries/:id`
 - `DELETE /api/entries/:id`
+- `GET /api/health`
 
 All `/api/entries` routes require `Authorization: Bearer <token>` from login.
 
-## Deployment
+## Deployment (Vercel)
 
-### Deploy Flask backend on Render
+### Backend
 
-Root: `personal-profile/backend`
+Project root: `personal-profile/backend`
 
-Use:
-- Build command: `pip install -r requirements.txt`
-- Start command: `gunicorn app:app`
+- Build command: `npm run build`
+- Output directory: `dist`
+- Install command: `npm install`
 
-Set Render environment variables from `personal-profile/backend/.env.example`.
+Set environment variables from `personal-profile/backend/.env.example`.
 
-Important production values:
-- `FRONTEND_ORIGIN=https://<your-vercel-domain>`
-- `AFTER_LOGIN_URL=https://<where-your-main-page-is-hosted>/main.html`
+### Guestbook Frontend
 
-### Deploy React app on Vercel
+Project root: `personal-profile/frontend/guestbook-app`
 
-Root: `personal-profile/frontend/guestbook-app`
+Set environment variables:
 
-Set Vercel environment variables:
-- `VITE_API_BASE_URL=https://<your-render-backend-domain>`
+- `VITE_API_BASE_URL=https://<your-backend-domain>`
 - `VITE_AFTER_LOGIN_URL=https://<where-your-main-page-is-hosted>/main.html`
 
 `vercel.json` is included for SPA route rewrites.
 
 ## Notes
 
-- `main.html` includes an "Open Guestbook" link (`/guestbook`). Update this link to your actual Vercel guestbook URL if your main page is hosted elsewhere.
-- Login success currently redirects to `AFTER_LOGIN_URL` returned by Flask.
+- If your static profile page is hosted separately, update guestbook links accordingly.
+- Login returns a token and redirect URL.

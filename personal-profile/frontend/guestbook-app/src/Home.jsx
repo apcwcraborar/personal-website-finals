@@ -9,7 +9,7 @@ const Home = () => {
         <h1><strong>NO1 LIKE ME</strong></h1>
 
         <div className="profile-img">
-          <img src="emo.jpg" alt="Profile Image" />
+          <img src="/emo.jpg" alt="Profile Image" />
         </div>
 
         <div className="center-align">
@@ -20,7 +20,15 @@ const Home = () => {
         </div>
 
         <div className="padding-top">
-          <img src="separator.png" alt="separator" width="395.60" height="30.9" />
+          <img
+            src="/separator.png"
+            alt="separator"
+            width="395.60"
+            height="30.9"
+            onError={(event) => {
+              event.currentTarget.style.display = 'none';
+            }}
+          />
         </div>
 
         <div className="about-card">
@@ -104,7 +112,7 @@ const Home = () => {
       <div className="music">
         <h2>Now Playing</h2>
         <div className="music-img">
-          <img src="internetfame.png" alt="Sassy Scene" />
+          <img src="/internetfame.png" alt="Sassy Scene" />
         </div>
         <div className="center-align">
           <h3>Faster N Harder (Instrumental)</h3>
@@ -112,7 +120,7 @@ const Home = () => {
         </div>
 
         <audio controls autoPlay loop>
-          <source src="Sassy Scene - Faster n Harder (Instrumental).mp3" type="audio/mpeg" />
+          <source src="/Sassy Scene - Faster n Harder (Instrumental).mp3" type="audio/mpeg" />
           Your browser does not support audio.
         </audio>
       </div>

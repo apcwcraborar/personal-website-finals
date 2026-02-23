@@ -1,0 +1,9 @@
+Place these restored files in this folder:
+
+- emo.jpg
+- separator.png
+- internetfame.png
+- Sassy Scene - Faster n Harder (Instrumental).mp3
+
+This folder is served at web root by Vite.
+Example: public/internetfame.png -> /internetfame.png

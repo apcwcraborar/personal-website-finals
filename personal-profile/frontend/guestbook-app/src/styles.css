@@ -52,10 +52,6 @@ button.secondary {
   background: #5f5f5f;
 }
 
-button.danger {
-  background: #a01919;
-}
-
 .entry-list {
   list-style: none;
   padding: 0;
@@ -67,11 +63,6 @@ button.danger {
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
-}
-
-.entry-actions {
-  display: flex;
-  gap: 10px;
 }
 
 .actions-row {
