@@ -29,3 +29,8 @@ lerna-debug.log*
 *.swp
 *.swo
 *~
+
+# API compiled files
+/api/*.js
+/api/*.d.ts
+/api/*.map

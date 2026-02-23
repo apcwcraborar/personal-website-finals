@@ -1,8 +1,20 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('health')
+@Controller()
 export class AppController {
   @Get()
+  root() {
+    return {
+      message: 'Personal Website Guestbook API',
+      status: 'running',
+      endpoints: {
+        health: '/api/health',
+        entries: '/api/entries',
+      },
+    };
+  }
+
+  @Get('health')
   health() {
     return {
       status: 'ok',
