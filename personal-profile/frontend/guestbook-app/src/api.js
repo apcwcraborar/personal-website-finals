@@ -8,26 +8,8 @@ const JSON_HEADERS = {
   "Content-Type": "application/json",
 };
 
-export async function login(username, password) {
-  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
-    method: "POST",
-    headers: JSON_HEADERS,
-    body: JSON.stringify({ username, password }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Invalid login");
-  }
-
-  return response.json();
-}
-
-export async function getEntries(token) {
-  const response = await fetch(`${API_BASE_URL}/api/entries`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export async function getEntries() {
+  const response = await fetch(`${API_BASE_URL}/api/entries`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch entries");
@@ -36,50 +18,15 @@ export async function getEntries(token) {
   return response.json();
 }
 
-export async function createEntry(token, data) {
+export async function createEntry(data) {
   const response = await fetch(`${API_BASE_URL}/api/entries`, {
     method: "POST",
-    headers: {
-      ...JSON_HEADERS,
-      Authorization: `Bearer ${token}`,
-    },
+    headers: JSON_HEADERS,
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
     throw new Error("Failed to create entry");
-  }
-
-  return response.json();
-}
-
-export async function updateEntry(token, id, data) {
-  const response = await fetch(`${API_BASE_URL}/api/entries/${id}`, {
-    method: "PUT",
-    headers: {
-      ...JSON_HEADERS,
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to update entry");
-  }
-
-  return response.json();
-}
-
-export async function deleteEntry(token, id) {
-  const response = await fetch(`${API_BASE_URL}/api/entries/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete entry");
   }
 
   return response.json();
