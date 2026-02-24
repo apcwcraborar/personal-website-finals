@@ -1,7 +1,48 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import './Home.css';
 
+const tracks = [
+  {
+    title: 'Faster N Harder (Instrumental)',
+    artist: '6arelyhuman',
+    audioSrc: '/Sassy Scene - Faster n Harder (Instrumental).mp3',
+    imageSrc: '/internetfame.png',
+    imageAlt: 'Sassy Scene',
+  },
+  {
+    title: 'ON DAT BXTCH [Instrumental]',
+    artist: 'Lumi Athena',
+    audioSrc: '/Lumi Athena - ON DAT BXTCH [INSTRUMENTAL].mp3',
+    imageSrc: '/on dat b.jpg',
+    imageAlt: 'ON DAT BXTCH cover',
+  },
+  {
+    title: 'DANCE! Till We Die',
+    artist: '6arelyhuman',
+    audioSrc: '/DANCE! Till We Die.mp3',
+    imageSrc: '/dance til we die.jpg',
+    imageAlt: 'DANCE! Till We Die cover',
+  },
+];
+
+function shufflePlaylist(list) {
+  const shuffled = [...list];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 const Home = () => {
+  const playlist = useMemo(() => shufflePlaylist(tracks), []);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const currentTrack = playlist[currentTrackIndex];
+
+  const handleTrackEnd = () => {
+    setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
+  };
+
   return (
     <div className="container">
       {/* LEFT: PROFILE */}
@@ -112,15 +153,15 @@ const Home = () => {
       <div className="music">
         <h2>Now Playing</h2>
         <div className="music-img">
-          <img src="/internetfame.png" alt="Sassy Scene" />
+          <img src={currentTrack.imageSrc} alt={currentTrack.imageAlt} />
         </div>
         <div className="center-align">
-          <h3>Faster N Harder (Instrumental)</h3>
-          <h4>6arelyhuman</h4>
+          <h3>{currentTrack.title}</h3>
+          <h4>{currentTrack.artist}</h4>
         </div>
 
-        <audio controls autoPlay loop>
-          <source src="/Sassy Scene - Faster n Harder (Instrumental).mp3" type="audio/mpeg" />
+        <audio key={currentTrack.audioSrc} controls autoPlay onEnded={handleTrackEnd}>
+          <source src={currentTrack.audioSrc} type="audio/mpeg" />
           Your browser does not support audio.
         </audio>
       </div>

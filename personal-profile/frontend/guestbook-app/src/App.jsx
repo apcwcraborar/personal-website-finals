@@ -61,7 +61,10 @@ function GuestbookPage() {
   return (
     <div className="page">
       <div className="card">
-        <h1>WENSI</h1>
+        <div className="card-header-row">
+          <h1>WENSI</h1>
+          <a href="/home" className="header-link">Go to Main Page</a>
+        </div>
 
         {error && <div className="error">{error}</div>}
 
@@ -108,10 +111,6 @@ function GuestbookPage() {
             </ul>
           )}
         </div>
-
-        <div className="actions-row">
-          <a href="/home">Go to Main Page</a>
-        </div>
       </div>
     </div>
   );
@@ -122,15 +121,15 @@ function GalleryPage() {
     <div className="page">
       <div className="card">
         <h1>My Piccys</h1>
-        <div className="entries-section">
+        <div className="gallery-grid">
           {galleryImages.map((src) => (
-            <div key={src} style={{ marginBottom: "1rem" }}>
-              <img src={src} alt="Gallery" style={{ width: "100%", borderRadius: "8px" }} />
+            <div key={src} className="gallery-item">
+              <img src={src} alt="Gallery" className="gallery-image" />
             </div>
           ))}
         </div>
         <div className="actions-row">
-          <a href="/home">Go to Main Page</a>
+          <a href="/home" aria-label="Back to Main Page">← Back to Main Page</a>
         </div>
       </div>
     </div>
