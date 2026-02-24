@@ -4,6 +4,22 @@ import { createEntry, getEntries } from "./api";
 import Home from "./Home";
 import "./styles.css";
 
+const galleryImages = [
+  "/gallery/comms6.png",
+  "/gallery/Jashy_20251225214936.png",
+  "/gallery/comms1.png",
+  "/gallery/comms4.png",
+  "/gallery/cat.jpg",
+  "/gallery/comms2.png",
+  "/gallery/comms3.png",
+  "/gallery/comms 1_wm1.png",
+  "/gallery/special.png",
+  "/gallery/flins.png",
+  "/gallery/comms.png",
+  "/gallery/repost_1.png",
+  "/gallery/comms5.png",
+];
+
 function GuestbookPage() {
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState("");
@@ -45,7 +61,7 @@ function GuestbookPage() {
   return (
     <div className="page">
       <div className="card">
-        <h1>Guestbook</h1>
+        <h1>WENSI</h1>
 
         {error && <div className="error">{error}</div>}
 
@@ -101,11 +117,32 @@ function GuestbookPage() {
   );
 }
 
+function GalleryPage() {
+  return (
+    <div className="page">
+      <div className="card">
+        <h1>My Piccys</h1>
+        <div className="entries-section">
+          {galleryImages.map((src) => (
+            <div key={src} style={{ marginBottom: "1rem" }}>
+              <img src={src} alt="Gallery" style={{ width: "100%", borderRadius: "8px" }} />
+            </div>
+          ))}
+        </div>
+        <div className="actions-row">
+          <a href="/home">Go to Main Page</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<GuestbookPage />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/gallery" element={<GalleryPage />} />
     </Routes>
   );
 }

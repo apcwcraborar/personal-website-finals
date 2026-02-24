@@ -14,7 +14,9 @@ const Home = () => {
 
         <div className="center-align">
           <h2>Wenchie Arhowen Raborar</h2>
-          <a href="/">Open Guestbook</a>
+          <a href="/gallery">View my piccys XD</a>
+          <br />
+          <a href="/">Open WENSI</a>
         </div>
 
         <div className="padding-top">
