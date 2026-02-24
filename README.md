@@ -1,10 +1,10 @@
-# Personal Website + Guestbook
+# Personal Website + WENSI Guestbook
 
-A personal website with an emo/scenecore aesthetic featuring a public guestbook where visitors can leave messages.
+A personal website with an emo/scenecore aesthetic featuring a public guestbook, profile page, clickable image gallery, and music playlist.
 
 This repository contains:
 
-- **Guestbook React App** (Landing Page) - `personal-profile/frontend/guestbook-app`
+- **WENSI Guestbook React App** (Landing Page) - `personal-profile/frontend/guestbook-app`
 - **Profile Page** - `personal-profile/frontend/guestbook-app/src/Home.jsx`
 - **NestJS API Backend** - `personal-profile/backend`
 - **Supabase Database** - For guestbook message storage
@@ -23,8 +23,11 @@ This repository contains:
 
 - 🎨 Custom emo/scenecore aesthetic with animated background
 - 💬 Public guestbook (no login required to view or post)
+- 🖼️ Gallery page with Pinterest-style layout
+- 🔎 Gallery images open full-size when clicked
 - 📱 Responsive design
-- 🎵 Music player integration
+- 🎵 Randomized multi-track music player (changes on each site open)
+- ▶️ Clickable song cards to play specific tracks
 - ⚡ Fast loading with Vite
 
 ## 1) Supabase Setup
@@ -120,8 +123,9 @@ Frontend will run on: `http://localhost:5173`
 
 ### Routes
 
-- `/` - Guestbook (landing page)
+- `/` - WENSI guestbook (landing page)
 - `/home` - Main profile page
+- `/gallery` - Image gallery (masonry layout)
 
 ## API Endpoints
 
@@ -209,7 +213,7 @@ personal-profile/
 │
 └── frontend/
     └── guestbook-app/      # React + Vite app
-        ├── public/         # Static assets (bg.gif, separator.png, etc.)
+      ├── public/         # Static assets (bg.gif, separate.png, gallery/, music, etc.)
         ├── src/
         │   ├── App.jsx     # Main app with routing
         │   ├── Home.jsx    # Profile page
@@ -225,10 +229,15 @@ personal-profile/
 
 The project includes custom-generated assets:
 - `bg.gif` - Animated background with gradient effect
-- `separator.png` - Decorative line separator
+- `separate.png` - Decorative line separator
 - `emo.jpg` - Profile image
-- `internetfame.png` - Image asset
-- `Sassy Scene - Faster n Harder (Instrumental).mp3` - Music player track
+- `internetfame.png` - Cover image for Faster N Harder
+- `on dat b.jpg` - Cover image for ON DAT BXTCH [Instrumental]
+- `dance til we die.jpg` - Cover image for DANCE! Till We Die
+- `Sassy Scene - Faster n Harder (Instrumental).mp3` - Music track
+- `Lumi Athena - ON DAT BXTCH [INSTRUMENTAL].mp3` - Music track
+- `DANCE! Till We Die.mp3` - Music track
+- `gallery/` - Gallery images shown on `/gallery`
 
 ## Troubleshooting
 
