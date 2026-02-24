@@ -19,7 +19,7 @@ const Home = () => {
 
         <div className="padding-top">
           <img
-            src="/separator.png"
+            src="/separate.png"
             alt="separator"
             width="395.60"
             height="30.9"

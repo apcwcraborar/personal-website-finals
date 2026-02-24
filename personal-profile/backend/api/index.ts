@@ -13,9 +13,13 @@ export default async (req: any, res: any) => {
     app.enableCors({
       origin: [frontendOrigin],
       credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
     });
 
-    app.setGlobalPrefix('api');
+    app.setGlobalPrefix('api', {
+      exclude: ['/'],
+    });
     await app.init();
   }
 
