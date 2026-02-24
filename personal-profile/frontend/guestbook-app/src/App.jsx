@@ -117,6 +117,8 @@ function GuestbookPage() {
 }
 
 function GalleryPage() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   return (
     <div className="page">
       <div className="card">
@@ -127,12 +129,38 @@ function GalleryPage() {
         <div className="gallery-grid">
           {galleryImages.map((src) => (
             <div key={src} className="gallery-item">
-              <a href={src} target="_blank" rel="noreferrer" className="gallery-image-link">
+              <button
+                type="button"
+                className="gallery-image-button"
+                onClick={() => setSelectedImage(src)}
+              >
                 <img src={src} alt="Gallery" className="gallery-image" />
-              </a>
+              </button>
             </div>
           ))}
         </div>
+
+        {selectedImage && (
+          <div
+            className="gallery-dialog-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image preview"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="gallery-dialog-content" onClick={(event) => event.stopPropagation()}>
+              <button
+                type="button"
+                className="gallery-dialog-close"
+                aria-label="Close image preview"
+                onClick={() => setSelectedImage(null)}
+              >
+                ×
+              </button>
+              <img src={selectedImage} alt="Full size gallery" className="gallery-dialog-image" />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
