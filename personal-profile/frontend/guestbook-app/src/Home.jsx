@@ -60,7 +60,7 @@ const Home = () => {
           <h2>Wenchie Arhowen Raborar</h2>
           <a href="/gallery">View my piccys XD</a>
           <br />
-          <a href="/">Open WENSI</a>
+          <a href="/">Open Guestbook</a>
         </div>
 
         <div className="padding-top">

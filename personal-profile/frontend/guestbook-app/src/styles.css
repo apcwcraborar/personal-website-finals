@@ -21,6 +21,15 @@ body {
   padding: 24px;
 }
 
+.gallery-page {
+  display: block;
+}
+
+.gallery-card {
+  width: 100%;
+  max-width: none;
+}
+
 .card {
   width: min(760px, 100%);
   background: #000000;
@@ -365,6 +374,10 @@ button.secondary {
   }
 
   .page {
+    padding: 12px;
+  }
+
+  .gallery-page {
     padding: 12px;
   }
 

@@ -120,8 +120,8 @@ function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div className="page">
-      <div className="card">
+    <div className="page gallery-page">
+      <div className="card gallery-card">
         <div className="gallery-header-row">
           <a href="/home" className="gallery-back-link" aria-label="Back to Main Page">←</a>
           <h1>My Piccys</h1>
