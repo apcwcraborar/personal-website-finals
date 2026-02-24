@@ -38,6 +38,9 @@ const Home = () => {
   const playlist = useMemo(() => shufflePlaylist(tracks), []);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const currentTrack = playlist[currentTrackIndex];
+  const otherTracks = playlist
+    .map((track, index) => ({ ...track, index }))
+    .filter((track) => track.index !== currentTrackIndex);
 
   const handleTrackEnd = () => {
     setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
@@ -164,6 +167,23 @@ const Home = () => {
           <source src={currentTrack.audioSrc} type="audio/mpeg" />
           Your browser does not support audio.
         </audio>
+
+        <div className="song-list">
+          {otherTracks.map((track) => (
+            <button
+              key={track.audioSrc}
+              type="button"
+              className="song-card"
+              onClick={() => setCurrentTrackIndex(track.index)}
+            >
+              <img src={track.imageSrc} alt={track.imageAlt} className="song-card-image" />
+              <div className="song-card-info">
+                <h3>{track.title}</h3>
+                <h4>{track.artist}</h4>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

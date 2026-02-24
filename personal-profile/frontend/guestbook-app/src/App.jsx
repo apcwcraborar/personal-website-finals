@@ -120,16 +120,18 @@ function GalleryPage() {
   return (
     <div className="page">
       <div className="card">
-        <h1>My Piccys</h1>
+        <div className="gallery-header-row">
+          <a href="/home" className="gallery-back-link" aria-label="Back to Main Page">←</a>
+          <h1>My Piccys</h1>
+        </div>
         <div className="gallery-grid">
           {galleryImages.map((src) => (
             <div key={src} className="gallery-item">
-              <img src={src} alt="Gallery" className="gallery-image" />
+              <a href={src} target="_blank" rel="noreferrer" className="gallery-image-link">
+                <img src={src} alt="Gallery" className="gallery-image" />
+              </a>
             </div>
           ))}
-        </div>
-        <div className="actions-row">
-          <a href="/home" aria-label="Back to Main Page">← Back to Main Page</a>
         </div>
       </div>
     </div>
