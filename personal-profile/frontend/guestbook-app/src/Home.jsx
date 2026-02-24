@@ -179,7 +179,7 @@ const Home = ({
             aria-label={isPlaying ? 'Pause' : 'Play'}
             onClick={onTogglePlayPause}
           >
-            ⏯
+            {isPlaying ? '⏸' : '▶'}
           </button>
           <button type="button" className="music-control-button" aria-label="Next track" onClick={onNextTrack}>⏭</button>
         </div>

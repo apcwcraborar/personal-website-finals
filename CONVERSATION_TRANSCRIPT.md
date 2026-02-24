@@ -74,6 +74,10 @@ Date: 2026-02-24
    - Updated controls to `⏮`, `⏯`, and `⏭` for a more music-player look.
    - Kept accessible `aria-label` text for screen readers.
 
+19. Update play/pause icon behavior.
+   - Middle control now shows `▶` when paused.
+   - Middle control switches to `⏸` while music is playing.
+
 ## Notes
 
 - This file is maintained separately from README as requested.
