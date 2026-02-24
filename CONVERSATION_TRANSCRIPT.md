@@ -56,6 +56,10 @@ Date: 2026-02-24
       - Gallery images are loaded (or errored).
     - Added `Loading...` text below the animated heart.
 
+14. Remove song highlight when a track is playing.
+      - Removed persistent selected-card background styling.
+      - Song cards now keep the normal style while still allowing click-to-play behavior.
+
 ## Notes
 
 - This file is maintained separately from README as requested.

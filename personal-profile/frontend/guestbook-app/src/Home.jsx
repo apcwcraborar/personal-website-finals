@@ -165,7 +165,7 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex, onReady }) =>
             <button
               key={track.audioSrc}
               type="button"
-              className={`song-card${track.index === currentTrackIndex ? ' song-card-selected' : ''}`}
+              className="song-card"
               aria-pressed={track.index === currentTrackIndex}
               onClick={() => setCurrentTrackIndex(track.index)}
             >
