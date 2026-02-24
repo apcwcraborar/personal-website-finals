@@ -93,7 +93,7 @@ const Home = () => {
               <ul className="heart-list">
                 <li>Drawing</li>
                 <li>Gaming</li>
-                <li>Reading (edgar allan poe is cool)</li>
+                <li>Reading</li>
                 <li>Origami</li>
                 <li>Doomscrolling</li>
               </ul>
