@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { createEntry, getEntries } from "./api";
 import Home from "./Home";
@@ -19,6 +19,39 @@ const galleryImages = [
   "/gallery/repost_1.png",
   "/gallery/comms5.png",
 ];
+
+const tracks = [
+  {
+    title: "Faster N Harder (Instrumental)",
+    artist: "6arelyhuman",
+    audioSrc: "/Sassy Scene - Faster n Harder (Instrumental).mp3",
+    imageSrc: "/internetfame.png",
+    imageAlt: "Sassy Scene",
+  },
+  {
+    title: "ON DAT BXTCH [Instrumental]",
+    artist: "Lumi Athena",
+    audioSrc: "/Lumi Athena - ON DAT BXTCH [INSTRUMENTAL].mp3",
+    imageSrc: "/on dat b.jpg",
+    imageAlt: "ON DAT BXTCH cover",
+  },
+  {
+    title: "DANCE! Till We Die",
+    artist: "6arelyhuman",
+    audioSrc: "/DANCE! Till We Die.mp3",
+    imageSrc: "/dance til we die.jpg",
+    imageAlt: "DANCE! Till We Die cover",
+  },
+];
+
+function shufflePlaylist(list) {
+  const shuffled = [...list];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
 
 function GuestbookPage() {
   const [entries, setEntries] = useState([]);
@@ -167,11 +200,34 @@ function GalleryPage() {
 }
 
 export default function App() {
+  const playlist = useMemo(() => shufflePlaylist(tracks), []);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const currentTrack = playlist[currentTrackIndex];
+
+  const handleTrackEnd = () => {
+    setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
+  };
+
   return (
-    <Routes>
-      <Route path="/" element={<GuestbookPage />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/gallery" element={<GalleryPage />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<GuestbookPage />} />
+        <Route
+          path="/home"
+          element={(
+            <Home
+              playlist={playlist}
+              currentTrackIndex={currentTrackIndex}
+              setCurrentTrackIndex={setCurrentTrackIndex}
+            />
+          )}
+        />
+        <Route path="/gallery" element={<GalleryPage />} />
+      </Routes>
+
+      <audio key={currentTrack.audioSrc} autoPlay onEnded={handleTrackEnd} style={{ display: "none" }}>
+        <source src={currentTrack.audioSrc} type="audio/mpeg" />
+      </audio>
+    </>
   );
 }

@@ -221,6 +221,22 @@ audio {
   color: #fa1e9e;
 }
 
+.song-card.song-card-selected,
+.song-card.song-card-selected:hover {
+  background: #ff9fce;
+  border-color: #ff9fce;
+}
+
+.song-card.song-card-selected .song-card-info h3,
+.song-card.song-card-selected:hover .song-card-info h3 {
+  color: #ff9fce;
+}
+
+.song-card.song-card-selected .song-card-info h4,
+.song-card.song-card-selected:hover .song-card-info h4 {
+  color: #fa1e9e;
+}
+
 .song-card-image {
   width: 72px;
   height: 72px;

@@ -1,50 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import './Home.css';
-
-const tracks = [
-  {
-    title: 'Faster N Harder (Instrumental)',
-    artist: '6arelyhuman',
-    audioSrc: '/Sassy Scene - Faster n Harder (Instrumental).mp3',
-    imageSrc: '/internetfame.png',
-    imageAlt: 'Sassy Scene',
-  },
-  {
-    title: 'ON DAT BXTCH [Instrumental]',
-    artist: 'Lumi Athena',
-    audioSrc: '/Lumi Athena - ON DAT BXTCH [INSTRUMENTAL].mp3',
-    imageSrc: '/on dat b.jpg',
-    imageAlt: 'ON DAT BXTCH cover',
-  },
-  {
-    title: 'DANCE! Till We Die',
-    artist: '6arelyhuman',
-    audioSrc: '/DANCE! Till We Die.mp3',
-    imageSrc: '/dance til we die.jpg',
-    imageAlt: 'DANCE! Till We Die cover',
-  },
-];
-
-function shufflePlaylist(list) {
-  const shuffled = [...list];
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
-  }
-  return shuffled;
-}
-
-const Home = () => {
-  const playlist = useMemo(() => shufflePlaylist(tracks), []);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
   const currentTrack = playlist[currentTrackIndex];
-  const otherTracks = playlist
-    .map((track, index) => ({ ...track, index }))
-    .filter((track) => track.index !== currentTrackIndex);
-
-  const handleTrackEnd = () => {
-    setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
-  };
+  const tracksWithIndex = playlist.map((track, index) => ({ ...track, index }));
 
   return (
     <div className="container">
@@ -163,17 +121,13 @@ const Home = () => {
           <h4>{currentTrack.artist}</h4>
         </div>
 
-        <audio key={currentTrack.audioSrc} controls autoPlay onEnded={handleTrackEnd}>
-          <source src={currentTrack.audioSrc} type="audio/mpeg" />
-          Your browser does not support audio.
-        </audio>
-
         <div className="song-list">
-          {otherTracks.map((track) => (
+          {tracksWithIndex.map((track) => (
             <button
               key={track.audioSrc}
               type="button"
-              className="song-card"
+              className={`song-card${track.index === currentTrackIndex ? ' song-card-selected' : ''}`}
+              aria-pressed={track.index === currentTrackIndex}
               onClick={() => setCurrentTrackIndex(track.index)}
             >
               <img src={track.imageSrc} alt={track.imageAlt} className="song-card-image" />
