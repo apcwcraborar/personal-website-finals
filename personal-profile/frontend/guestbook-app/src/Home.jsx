@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
-const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
+const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex, onReady }) => {
   const currentTrack = playlist[currentTrackIndex];
   const tracksWithIndex = playlist.map((track, index) => ({ ...track, index }));
+  const [resolvedImages, setResolvedImages] = useState(() => new Set());
+  const hasReportedReady = useRef(false);
+
+  const requiredImageSources = useMemo(() => {
+    const uniqueSources = new Set(['/emo.jpg', '/separate.png', ...playlist.map((track) => track.imageSrc)]);
+    return Array.from(uniqueSources);
+  }, [playlist]);
+
+  const handleImageResolved = (imageSrc) => {
+    setResolvedImages((previousResolvedImages) => {
+      if (previousResolvedImages.has(imageSrc)) {
+        return previousResolvedImages;
+      }
+
+      const nextResolvedImages = new Set(previousResolvedImages);
+      nextResolvedImages.add(imageSrc);
+      return nextResolvedImages;
+    });
+  };
+
+  useEffect(() => {
+    if (!hasReportedReady.current && resolvedImages.size >= requiredImageSources.length) {
+      hasReportedReady.current = true;
+      onReady?.();
+    }
+  }, [onReady, requiredImageSources.length, resolvedImages]);
 
   return (
     <div className="container">
@@ -12,7 +38,12 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
         <h1><strong>NO1 LIKE ME</strong></h1>
 
         <div className="profile-img">
-          <img src="/emo.jpg" alt="Profile Image" />
+          <img
+            src="/emo.jpg"
+            alt="Profile Image"
+            onLoad={() => handleImageResolved('/emo.jpg')}
+            onError={() => handleImageResolved('/emo.jpg')}
+          />
         </div>
 
         <div className="center-align">
@@ -30,7 +61,9 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
             height="30.9"
             onError={(event) => {
               event.currentTarget.style.display = 'none';
+              handleImageResolved('/separate.png');
             }}
+            onLoad={() => handleImageResolved('/separate.png')}
           />
         </div>
 
@@ -115,7 +148,12 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
       <div className="music">
         <h2>Now Playing</h2>
         <div className="music-img">
-          <img src={currentTrack.imageSrc} alt={currentTrack.imageAlt} />
+          <img
+            src={currentTrack.imageSrc}
+            alt={currentTrack.imageAlt}
+            onLoad={() => handleImageResolved(currentTrack.imageSrc)}
+            onError={() => handleImageResolved(currentTrack.imageSrc)}
+          />
         </div>
         <div className="center-align">
           <h3>{currentTrack.title}</h3>
@@ -131,7 +169,13 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
               aria-pressed={track.index === currentTrackIndex}
               onClick={() => setCurrentTrackIndex(track.index)}
             >
-              <img src={track.imageSrc} alt={track.imageAlt} className="song-card-image" />
+              <img
+                src={track.imageSrc}
+                alt={track.imageAlt}
+                className="song-card-image"
+                onLoad={() => handleImageResolved(track.imageSrc)}
+                onError={() => handleImageResolved(track.imageSrc)}
+              />
               <div className="song-card-info">
                 <h3>{track.title}</h3>
                 <h4>{track.artist}</h4>

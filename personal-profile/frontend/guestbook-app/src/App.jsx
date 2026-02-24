@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { createEntry, getEntries } from "./api";
 import Home from "./Home";
@@ -53,7 +53,7 @@ function shufflePlaylist(list) {
   return shuffled;
 }
 
-function GuestbookPage() {
+function GuestbookPage({ onReady }) {
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
@@ -61,17 +61,31 @@ function GuestbookPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     async function loadEntries() {
       try {
         const data = await getEntries();
-        setEntries(data);
+        if (isMounted) {
+          setEntries(data);
+        }
       } catch (fetchError) {
-        setError(fetchError.message);
+        if (isMounted) {
+          setError(fetchError.message);
+        }
+      } finally {
+        if (isMounted) {
+          onReady?.();
+        }
       }
     }
 
     loadEntries();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [onReady]);
 
   async function handleCreate(event) {
     event.preventDefault();
@@ -149,8 +163,27 @@ function GuestbookPage() {
   );
 }
 
-function GalleryPage() {
+function GalleryPage({ onReady }) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loadedGalleryImages, setLoadedGalleryImages] = useState(() => new Set());
+
+  const handleGalleryImageResolved = (imageSrc) => {
+    setLoadedGalleryImages((previousLoadedImages) => {
+      if (previousLoadedImages.has(imageSrc)) {
+        return previousLoadedImages;
+      }
+
+      const nextLoadedImages = new Set(previousLoadedImages);
+      nextLoadedImages.add(imageSrc);
+      return nextLoadedImages;
+    });
+  };
+
+  useEffect(() => {
+    if (loadedGalleryImages.size === galleryImages.length) {
+      onReady?.();
+    }
+  }, [loadedGalleryImages, onReady]);
 
   return (
     <div className="page gallery-page">
@@ -167,7 +200,13 @@ function GalleryPage() {
                 className="gallery-image-button"
                 onClick={() => setSelectedImage(src)}
               >
-                <img src={src} alt="Gallery" className="gallery-image" />
+                <img
+                  src={src}
+                  alt="Gallery"
+                  className="gallery-image"
+                  onLoad={() => handleGalleryImageResolved(src)}
+                  onError={() => handleGalleryImageResolved(src)}
+                />
               </button>
             </div>
           ))}
@@ -206,15 +245,18 @@ export default function App() {
   const [isRouteLoading, setIsRouteLoading] = useState(true);
   const currentTrack = playlist[currentTrackIndex];
 
+  const handleRouteReady = useCallback((path) => {
+    if (location.pathname === path) {
+      setIsRouteLoading(false);
+    }
+  }, [location.pathname]);
+
+  const onGuestbookReady = useCallback(() => handleRouteReady("/"), [handleRouteReady]);
+  const onHomeReady = useCallback(() => handleRouteReady("/home"), [handleRouteReady]);
+  const onGalleryReady = useCallback(() => handleRouteReady("/gallery"), [handleRouteReady]);
+
   useEffect(() => {
     setIsRouteLoading(true);
-    const timeoutId = window.setTimeout(() => {
-      setIsRouteLoading(false);
-    }, 450);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
   }, [location.pathname]);
 
   const handleTrackEnd = () => {
@@ -224,7 +266,7 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<GuestbookPage />} />
+        <Route path="/" element={<GuestbookPage onReady={onGuestbookReady} />} />
         <Route
           path="/home"
           element={(
@@ -232,10 +274,11 @@ export default function App() {
               playlist={playlist}
               currentTrackIndex={currentTrackIndex}
               setCurrentTrackIndex={setCurrentTrackIndex}
+              onReady={onHomeReady}
             />
           )}
         />
-        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/gallery" element={<GalleryPage onReady={onGalleryReady} />} />
       </Routes>
 
       <audio key={currentTrack.audioSrc} autoPlay onEnded={handleTrackEnd} style={{ display: "none" }}>
@@ -245,6 +288,7 @@ export default function App() {
       {isRouteLoading && (
         <div className="route-loading-overlay" aria-live="polite" aria-label="Loading">
           <div className="route-loading-heart">❤</div>
+          <div className="route-loading-text">Loading...</div>
         </div>
       )}
     </>
