@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
   const currentTrack = playlist[currentTrackIndex];
@@ -16,9 +17,9 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex }) => {
 
         <div className="center-align">
           <h2>Wenchie Arhowen Raborar</h2>
-          <a href="/gallery">View my piccys XD</a>
+          <Link to="/gallery">View my piccys XD</Link>
           <br />
-          <a href="/">Open Guestbook</a>
+          <Link to="/">Open Guestbook</Link>
         </div>
 
         <div className="padding-top">

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { createEntry, getEntries } from "./api";
 import Home from "./Home";
 import "./styles.css";
@@ -96,7 +96,7 @@ function GuestbookPage() {
       <div className="card">
         <div className="card-header-row">
           <h1>WENSI</h1>
-          <a href="/home" className="header-link">Go to Main Page</a>
+          <Link to="/home" className="header-link">Go to Main Page</Link>
         </div>
 
         {error && <div className="error">{error}</div>}
@@ -156,7 +156,7 @@ function GalleryPage() {
     <div className="page gallery-page">
       <div className="card gallery-card">
         <div className="gallery-header-row">
-          <a href="/home" className="gallery-back-link" aria-label="Back to Main Page">←</a>
+          <Link to="/home" className="gallery-back-link" aria-label="Back to Main Page">←</Link>
           <h1>My Piccys</h1>
         </div>
         <div className="gallery-grid">
@@ -200,9 +200,22 @@ function GalleryPage() {
 }
 
 export default function App() {
+  const location = useLocation();
   const playlist = useMemo(() => shufflePlaylist(tracks), []);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [isRouteLoading, setIsRouteLoading] = useState(true);
   const currentTrack = playlist[currentTrackIndex];
+
+  useEffect(() => {
+    setIsRouteLoading(true);
+    const timeoutId = window.setTimeout(() => {
+      setIsRouteLoading(false);
+    }, 450);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [location.pathname]);
 
   const handleTrackEnd = () => {
     setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
@@ -228,6 +241,12 @@ export default function App() {
       <audio key={currentTrack.audioSrc} autoPlay onEnded={handleTrackEnd} style={{ display: "none" }}>
         <source src={currentTrack.audioSrc} type="audio/mpeg" />
       </audio>
+
+      {isRouteLoading && (
+        <div className="route-loading-overlay" aria-live="polite" aria-label="Loading">
+          <div className="route-loading-heart">❤</div>
+        </div>
+      )}
     </>
   );
 }
