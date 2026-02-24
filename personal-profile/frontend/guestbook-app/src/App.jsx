@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { createEntry, getEntries } from "./api";
 import Home from "./Home";
@@ -243,6 +243,8 @@ export default function App() {
   const playlist = useMemo(() => shufflePlaylist(tracks), []);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isRouteLoading, setIsRouteLoading] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const audioRef = useRef(null);
   const currentTrack = playlist[currentTrackIndex];
 
   const handleRouteReady = useCallback((path) => {
@@ -263,6 +265,55 @@ export default function App() {
     setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
   };
 
+  const handleNextTrack = useCallback(() => {
+    setIsPlaying(true);
+    setCurrentTrackIndex((previousIndex) => (previousIndex + 1) % playlist.length);
+  }, [playlist.length]);
+
+  const handlePreviousTrack = useCallback(() => {
+    setIsPlaying(true);
+    setCurrentTrackIndex((previousIndex) => (previousIndex - 1 + playlist.length) % playlist.length);
+  }, [playlist.length]);
+
+  const handleTogglePlayPause = useCallback(async () => {
+    const audioElement = audioRef.current;
+    if (!audioElement) {
+      return;
+    }
+
+    if (audioElement.paused) {
+      try {
+        await audioElement.play();
+        setIsPlaying(true);
+      } catch (error) {
+        setIsPlaying(false);
+      }
+      return;
+    }
+
+    audioElement.pause();
+    setIsPlaying(false);
+  }, []);
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+    if (!audioElement) {
+      return;
+    }
+
+    if (isPlaying) {
+      const playPromise = audioElement.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {
+          setIsPlaying(false);
+        });
+      }
+      return;
+    }
+
+    audioElement.pause();
+  }, [currentTrackIndex, isPlaying]);
+
   return (
     <>
       <Routes>
@@ -275,13 +326,25 @@ export default function App() {
               currentTrackIndex={currentTrackIndex}
               setCurrentTrackIndex={setCurrentTrackIndex}
               onReady={onHomeReady}
+              isPlaying={isPlaying}
+              onNextTrack={handleNextTrack}
+              onPreviousTrack={handlePreviousTrack}
+              onTogglePlayPause={handleTogglePlayPause}
             />
           )}
         />
         <Route path="/gallery" element={<GalleryPage onReady={onGalleryReady} />} />
       </Routes>
 
-      <audio key={currentTrack.audioSrc} autoPlay onEnded={handleTrackEnd} style={{ display: "none" }}>
+      <audio
+        ref={audioRef}
+        key={currentTrack.audioSrc}
+        autoPlay
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={handleTrackEnd}
+        style={{ display: "none" }}
+      >
         <source src={currentTrack.audioSrc} type="audio/mpeg" />
       </audio>
 

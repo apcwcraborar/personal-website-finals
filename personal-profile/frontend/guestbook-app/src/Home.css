@@ -195,6 +195,27 @@ audio {
   gap: 10px;
 }
 
+.music-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.music-control-button {
+  margin-top: 0;
+  background: #210015;
+  color: #ff9fce;
+  border: 2px solid #fa1e9e;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-weight: bold;
+}
+
+.music-control-button:hover {
+  background: #fa1e9e;
+  color: #000;
+}
+
 .song-card {
   width: 100%;
   display: flex;

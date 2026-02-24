@@ -57,8 +57,22 @@ Date: 2026-02-24
     - Added `Loading...` text below the animated heart.
 
 14. Remove song highlight when a track is playing.
-      - Removed persistent selected-card background styling.
-      - Song cards now keep the normal style while still allowing click-to-play behavior.
+   - Removed persistent selected-card background styling.
+   - Song cards now keep the normal style while still allowing click-to-play behavior.
+
+15. Center loading heart and loading text.
+   - Updated loading overlay alignment so the heart sits above `Loading...` in the center.
+
+16. Remove currently playing track from playlist cards.
+   - Playlist below `Now Playing` now only shows the other tracks.
+
+17. Add music playback controls.
+   - Added `Back`, `Play/Pause`, and `Next` buttons in the music panel.
+   - Wired controls to shared app-level audio so they work across routes.
+
+18. Replace music control labels with symbols.
+   - Updated controls to `⏮`, `⏯`, and `⏭` for a more music-player look.
+   - Kept accessible `aria-label` text for screen readers.
 
 ## Notes
 

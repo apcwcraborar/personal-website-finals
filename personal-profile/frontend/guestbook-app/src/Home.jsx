@@ -1,9 +1,20 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
-const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex, onReady }) => {
+const Home = ({
+  playlist,
+  currentTrackIndex,
+  setCurrentTrackIndex,
+  onReady,
+  isPlaying,
+  onNextTrack,
+  onPreviousTrack,
+  onTogglePlayPause,
+}) => {
   const currentTrack = playlist[currentTrackIndex];
-  const tracksWithIndex = playlist.map((track, index) => ({ ...track, index }));
+  const otherTracks = playlist
+    .map((track, index) => ({ ...track, index }))
+    .filter((track) => track.index !== currentTrackIndex);
   const [resolvedImages, setResolvedImages] = useState(() => new Set());
   const hasReportedReady = useRef(false);
 
@@ -160,13 +171,25 @@ const Home = ({ playlist, currentTrackIndex, setCurrentTrackIndex, onReady }) =>
           <h4>{currentTrack.artist}</h4>
         </div>
 
+        <div className="music-controls" aria-label="Music controls">
+          <button type="button" className="music-control-button" aria-label="Previous track" onClick={onPreviousTrack}>⏮</button>
+          <button
+            type="button"
+            className="music-control-button"
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+            onClick={onTogglePlayPause}
+          >
+            ⏯
+          </button>
+          <button type="button" className="music-control-button" aria-label="Next track" onClick={onNextTrack}>⏭</button>
+        </div>
+
         <div className="song-list">
-          {tracksWithIndex.map((track) => (
+          {otherTracks.map((track) => (
             <button
               key={track.audioSrc}
               type="button"
               className="song-card"
-              aria-pressed={track.index === currentTrackIndex}
               onClick={() => setCurrentTrackIndex(track.index)}
             >
               <img
