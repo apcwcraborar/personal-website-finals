@@ -1,6 +1,6 @@
-# Personal Website + WENSI Guestbook
+# WENSI'S Personal Website
 
-A personal website with an emo/scenecore aesthetic featuring a public guestbook, profile page, clickable image gallery, and music playlist.
+A personal website with an emo/scenecore aesthetic (similar to friendster and/or myspace) featuring a public guestbook, profile page, clickable image gallery, and music playlist.
 
 This repository contains:
 
